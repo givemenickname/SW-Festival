@@ -58,7 +58,7 @@ function manual_move(){
 	camera.position = camera_position;
 	camera.setTarget(target_position);
 
-	showInfoBox("Title:  " + gallery[dict_items[manual_navigation_idx]]["metadata"]);
+	showInfoBox("Title:  " + gallery[dict_items[manual_navigation_idx]]["metadata"], dict_items[manual_navigation_idx]);
 
 
 }
@@ -74,12 +74,22 @@ function manual_move_forward(){
 }
 
 // show metadata or other info
-function showInfoBox(title) {
+function showInfoBox(title, artworkId) {
     document.getElementById("artwork-info").innerText = title;
     //enable action buttons
     document.querySelectorAll('.action-button').forEach(button => {
         button.disabled = false;
     });
+
+    const chatButton = document.createElement('button');
+    chatButton.classList.add('action-button');
+    chatButton.innerText = 'Chat';
+    chatButton.onclick = () => openChat(artworkId);
+    
+    const actionButtons = document.querySelector('.action-buttons');
+    // clear existing buttons before adding new ones
+    actionButtons.innerHTML = '';
+    actionButtons.appendChild(chatButton);
 }
 
 function hideInfoBox() {
@@ -112,6 +122,64 @@ function changeLanguage(lang) {
     document.querySelector(`.help-text.${lang}`).classList.add('active');
 }
 
+// Chat functionality
+let currentArtworkId = null;
+
+function openChat(artworkId) {
+    currentArtworkId = artworkId;
+    document.getElementById('chat-container').style.display = 'flex';
+    const chatMessages = document.getElementById('chat-messages');
+    chatMessages.innerHTML = ''; // Clear previous messages
+    addMessageToChat('ai', `안녕하세요! '${artworkId}'에 대해 무엇이 궁금하신가요?`);
+}
+
+function closeChat() {
+    document.getElementById('chat-container').style.display = 'none';
+    currentArtworkId = null;
+}
+
+async function sendChatMessage() {
+    const input = document.getElementById('chat-input');
+    const message = input.value.trim();
+    if (message === '') return;
+
+    addMessageToChat('user', message);
+    input.value = '';
+
+    try {
+        const response = await fetch('/api/chat-groq', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                artworkId: currentArtworkId,
+                message: message,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        addMessageToChat('ai', data.reply);
+    } catch (error) {
+        console.error('Error sending chat message:', error);
+        addMessageToChat('ai', 'Sorry, I am having trouble connecting. Please try again later.');
+    }
+}
+
+function addMessageToChat(sender, message) {
+    const chatMessages = document.getElementById('chat-messages');
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('chat-message', `${sender}-message`);
+    messageElement.innerText = message;
+    chatMessages.appendChild(messageElement);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+
 // Load overlay content
 document.addEventListener('DOMContentLoaded', function() {
     fetch('overlay.html')
@@ -121,5 +189,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // Initialize help popup as hidden
             document.getElementById('help-popup').style.display = 'none';
             hideInfoBox(); // Call hideInfoBox to set initial state
+
+            // Add event listener for chat input
+            document.getElementById('chat-input').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    sendChatMessage();
+                }
+            });
         });
 });
