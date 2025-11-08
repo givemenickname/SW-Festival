@@ -472,12 +472,43 @@
 
 				let indice=0;
 				for (const artwork of gallery_artworks){
-					scene.getMeshByName(artwork).actionManager= new BABYLON.ActionManager();
-					scene.getMeshByName(artwork).actionManager.registerAction(
-						new BABYLON.ExecuteCodeAction(
-							{ trigger: BABYLON.ActionManager.OnPickTrigger },
-							CB_artwork_picked(indice)
-						));					
+					const artworkMesh = scene.getMeshByName(artwork);
+					artworkMesh.actionManager= new BABYLON.ActionManager();
+					
+					// Check if this is a hidden artwork that needs to be revealed
+					if (artworkMesh.userData && artworkMesh.userData.isRevealed === false) {
+						// Hidden artwork - reveal it first, then do normal interaction
+						artworkMesh.actionManager.registerAction(
+							new BABYLON.ExecuteCodeAction(
+								{ trigger: BABYLON.ActionManager.OnPickTrigger },
+								function() {
+									if (!artworkMesh.userData.isRevealed) {
+										// Reveal the artwork
+										artworkMesh.material = artworkMesh.userData.hiddenMaterial;
+										artworkMesh.userData.isRevealed = true;
+										
+										// Remove text plane
+										if (artworkMesh.userData.textPlane) {
+											artworkMesh.userData.textPlane.dispose();
+											if (artworkMesh.userData.textGUI) {
+												artworkMesh.userData.textGUI.dispose();
+											}
+										}
+									}
+									// Then do normal artwork interaction
+									CB_artwork_picked(indice)();
+								}
+							)
+						);
+					} else {
+						// Normal artwork
+						artworkMesh.actionManager.registerAction(
+							new BABYLON.ExecuteCodeAction(
+								{ trigger: BABYLON.ActionManager.OnPickTrigger },
+								CB_artwork_picked(indice)
+							)
+						);
+					}
 					indice++;
 				}
 

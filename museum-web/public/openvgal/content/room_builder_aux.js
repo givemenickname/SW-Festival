@@ -1,7 +1,7 @@
 // 원하는 라벨 텍스트
 const DOOR_LABELS = {
-	d_gallery3_0: "Van Gogh",
-	d_gallery4_1: "Monet",
+	"gallery3": "Van Gogh",
+	"gallery4": "Monet",
   };
   
   // Babylon GUI가 로드됐는지 확인
@@ -179,6 +179,130 @@ var text3D_builder=function(name, item_position, vector, parent, scene){
 
 }
 
+var createHiddenArtwork = function(name, item_position, item_size, vector, hidden_material, scene, item_shadow_material=null) {
+	// Creates a hidden artwork that shows "Hidden Artwork!" text instead of the image
+	// When clicked, it reveals the actual artwork
+	
+	const shadow_scale=1.3;
+	var base_vector=new BABYLON.Vector3(0, 0, 0);
+	const north_vector=new BABYLON.Vector3(0, 0, 1);
+	var abstractPlane = BABYLON.Plane.FromPositionAndNormal(base_vector, vector);
+	
+	// Create the artwork plane (initially hidden, will show text)
+	var item = BABYLON.MeshBuilder.CreatePlane(name, {sourcePlane: abstractPlane, width:item_size.width, height: item_size.height, sideOrientation: BABYLON.Mesh.SINGLESIDE}, scene);
+	item.position = new BABYLON.Vector3(item_position.x, item_position.y, item_position.z).add(vector.scale(3*item_separation/2));
+	item.checkCollisions = true;
+	
+	// Store the actual material for later reveal, but don't apply it yet
+	item.userData = { hiddenMaterial: hidden_material, isRevealed: false };
+	
+	// Create a blank material initially (white background)
+	var blankMaterial = new BABYLON.StandardMaterial("blank_" + name, scene);
+	blankMaterial.diffuseColor = new BABYLON.Color3(1, 1, 1);
+	item.material = blankMaterial;
+	
+	// Create shadow
+	if (item_shadow_material!=null) {
+		var item_shadow = BABYLON.MeshBuilder.CreatePlane("shadow", {sourcePlane: abstractPlane, width:item_size.width*shadow_scale, height: item_size.height*shadow_scale, sideOrientation: BABYLON.Mesh.SINGLESIDE}, scene);
+		item_shadow.position=new BABYLON.Vector3(item_position.x, item_position.y, item_position.z).add(vector.scale(0.01));
+		item_shadow.material=item_shadow_material;
+		
+		let existing_shadow_object=scene.getMeshByName('shadows');
+		if (existing_shadow_object){
+			var merged_mesh = BABYLON.Mesh.MergeMeshes([existing_shadow_object, item_shadow], true);
+			merged_mesh.name="shadows";
+		} else {
+			item_shadow.name="shadows";
+		}
+	}
+	
+	// Create frame
+	let item2 = BABYLON.MeshBuilder.CreateBox("box" + name, {
+		size: 1, 
+		updatable: true
+	}, scene);
+	item2.position = new BABYLON.Vector3(item_position.x, item_position.y, item_position.z).add(vector.scale(item_separation/2-0.001));
+	item2.rotate(BABYLON.Axis.Y, Math.acos(BABYLON.Vector3.Dot(vector, north_vector)), BABYLON.Space.LOCAL);
+	item2.scaling = new BABYLON.Vector3(item_size.width+margin, item_size.height+margin, item_separation);
+	
+	let existing_frame_object=scene.getMeshByName('frames');
+	if (existing_frame_object){
+		var merged_mesh = BABYLON.Mesh.MergeMeshes([existing_frame_object, item2], true);
+		merged_mesh.name="frames";
+	} else {
+		item2.name="frames";
+	}
+	
+	// Create overlay plane with image containing "Hidden Artwork!" text
+	const overlayPlane = BABYLON.MeshBuilder.CreatePlane(
+		name + "_overlay",
+		{ sourcePlane: abstractPlane, width: item_size.width, height: item_size.height, sideOrientation: BABYLON.Mesh.SINGLESIDE },
+		scene
+	);
+	overlayPlane.position = new BABYLON.Vector3(item_position.x, item_position.y, item_position.z).add(vector.scale(3*item_separation/2 + 0.02));
+	overlayPlane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_NONE;
+	overlayPlane.checkCollisions = true;
+	// Rotate overlay plane to match artwork orientation
+	overlayPlane.rotate(BABYLON.Axis.Y, Math.acos(BABYLON.Vector3.Dot(vector, north_vector)), BABYLON.Space.LOCAL);
+	
+	// Create dynamic texture with text "Hidden Artwork!" drawn on it
+	const textureSize = 512;
+	const dynamicTexture = new BABYLON.DynamicTexture(name + "_texture", { width: textureSize, height: textureSize }, scene);
+	const context = dynamicTexture.getContext();
+	
+	// Fill white background
+	context.fillStyle = "white";
+	context.fillRect(0, 0, textureSize, textureSize);
+	
+	// Draw text
+	context.fillStyle = "black";
+	context.font = "bold 48px sans-serif";
+	context.textAlign = "center";
+	context.textBaseline = "middle";
+	context.fillText("Hidden Artwork!", textureSize / 2, textureSize / 2);
+	
+	// Update the texture
+	dynamicTexture.update();
+	
+	// Create material with the dynamic texture
+	const overlayMaterial = new BABYLON.StandardMaterial(name + "_overlay_material", scene);
+	overlayMaterial.diffuseTexture = dynamicTexture;
+	overlayMaterial.emissiveTexture = dynamicTexture;
+	overlayMaterial.emissiveColor = new BABYLON.Color3(1, 1, 1);
+	overlayPlane.material = overlayMaterial;
+	
+	// Store reference to overlay plane for removal later
+	item.userData.textPlane = overlayPlane;
+	item.userData.textGUI = null; // No GUI needed anymore
+	
+	// Make the overlay plane clickable to reveal artwork
+	overlayPlane.actionManager = new BABYLON.ActionManager(scene);
+	overlayPlane.actionManager.registerAction(
+		new BABYLON.ExecuteCodeAction(
+			BABYLON.ActionManager.OnPickTrigger,
+			function() {
+				if (!item.userData.isRevealed) {
+					// Reveal the artwork
+					item.material = item.userData.hiddenMaterial;
+					item.userData.isRevealed = true;
+					
+					// Remove overlay plane
+					if (item.userData.textPlane) {
+						item.userData.textPlane.dispose();
+						if (item.userData.textGUI) {
+							item.userData.textGUI.dispose();
+						}
+					}
+				}
+			}
+		)
+	);
+	
+	// Note: The item's action manager will be set up in index.html to handle both reveal and normal interaction
+	
+	return item;
+}
+
 var item_builder= function(name, item_position, item_size, vector, material,scene, item_shadow_material=null){
 	//places artwork as an image texture
 	//adds a frame and both elements have a customizable separation from the wall
@@ -271,6 +395,7 @@ function populate_template(config_file, room_name,scene){
 	item_shadow_material.useAlphaFromDiffuseTexture = true;
 	
 	let i=3
+	let itemIndex = 0;
 	for (var item of dict_items){
 		//get location
 		let location=JSON.parse(gallery[item]["location"])
@@ -291,8 +416,16 @@ function populate_template(config_file, room_name,scene){
 		scaled_width=item_size*gallery[item]["width"];
 		scaled_height=item_size*gallery[item]["height"];
 		
-		//notice that y and z are flippped
-		item_builder(item + "_" + i ,{x:location[0], y:location[2], z:location[1]}, {width:scaled_width, height:scaled_height}, orientation, items_material, scene, item_shadow_material); 
+		// Check if this is the last artwork in gallery3
+		let isLastArtworkInGallery3 = (room_name === "gallery3" && itemIndex === dict_items.length - 1);
+		
+		if (isLastArtworkInGallery3) {
+			// Create hidden artwork with text instead of image
+			createHiddenArtwork(item + "_" + i, {x:location[0], y:location[2], z:location[1]}, {width:scaled_width, height:scaled_height}, orientation, items_material, scene, item_shadow_material);
+		} else {
+			//notice that y and z are flippped
+			item_builder(item + "_" + i ,{x:location[0], y:location[2], z:location[1]}, {width:scaled_width, height:scaled_height}, orientation, items_material, scene, item_shadow_material); 
+		}
 		
 		//update loading bar
 		tex.onLoadObservable.add(((j) => {
@@ -311,6 +444,7 @@ function populate_template(config_file, room_name,scene){
 
 		
 		i=i+1;
+		itemIndex++;
 	}
 	
 	if (dict_items.length>0)	{
