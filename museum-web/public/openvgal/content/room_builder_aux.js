@@ -196,9 +196,30 @@ var createHiddenArtwork = function(name, item_position, item_size, vector, hidde
 	// Store the actual material for later reveal, but don't apply it yet
 	item.userData = { hiddenMaterial: hidden_material, isRevealed: false };
 	
-	// Create a blank material initially (white background)
+	// Create dynamic texture with text "Hidden Artwork!" drawn on it
+	const textureSize = 512;
+	const dynamicTexture = new BABYLON.DynamicTexture(name + "_texture", { width: textureSize, height: textureSize }, scene);
+	const context = dynamicTexture.getContext();
+	
+	// Fill white background
+	context.fillStyle = "white";
+	context.fillRect(0, 0, textureSize, textureSize);
+	
+	// Draw text
+	context.fillStyle = "black";
+	context.font = "bold 48px sans-serif";
+	context.textAlign = "center";
+	context.textBaseline = "middle";
+	context.fillText("Hidden Artwork!", textureSize / 2, textureSize / 2);
+	
+	// Update the texture
+	dynamicTexture.update();
+	
+	// Create material with the dynamic texture (text drawn directly on the artwork)
 	var blankMaterial = new BABYLON.StandardMaterial("blank_" + name, scene);
-	blankMaterial.diffuseColor = new BABYLON.Color3(1, 1, 1);
+	blankMaterial.diffuseTexture = dynamicTexture;
+	blankMaterial.emissiveTexture = dynamicTexture;
+	blankMaterial.emissiveColor = new BABYLON.Color3(1, 1, 1);
 	item.material = blankMaterial;
 	
 	// Create shadow
@@ -233,74 +254,54 @@ var createHiddenArtwork = function(name, item_position, item_size, vector, hidde
 		item2.name="frames";
 	}
 	
-	// Create overlay plane with image containing "Hidden Artwork!" text
-	const overlayPlane = BABYLON.MeshBuilder.CreatePlane(
-		name + "_overlay",
-		{ sourcePlane: abstractPlane, width: item_size.width, height: item_size.height, sideOrientation: BABYLON.Mesh.SINGLESIDE },
-		scene
-	);
-	overlayPlane.position = new BABYLON.Vector3(item_position.x, item_position.y, item_position.z).add(vector.scale(3*item_separation/2 + 0.02));
-	overlayPlane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_NONE;
-	overlayPlane.checkCollisions = true;
-	// Rotate overlay plane to match artwork orientation
-	overlayPlane.rotate(BABYLON.Axis.Y, Math.acos(BABYLON.Vector3.Dot(vector, north_vector)), BABYLON.Space.LOCAL);
-	
-	// Create dynamic texture with text "Hidden Artwork!" drawn on it
-	const textureSize = 512;
-	const dynamicTexture = new BABYLON.DynamicTexture(name + "_texture", { width: textureSize, height: textureSize }, scene);
-	const context = dynamicTexture.getContext();
-	
-	// Fill white background
-	context.fillStyle = "white";
-	context.fillRect(0, 0, textureSize, textureSize);
-	
-	// Draw text
-	context.fillStyle = "black";
-	context.font = "bold 48px sans-serif";
-	context.textAlign = "center";
-	context.textBaseline = "middle";
-	context.fillText("Hidden Artwork!", textureSize / 2, textureSize / 2);
-	
-	// Update the texture
-	dynamicTexture.update();
-	
-	// Create material with the dynamic texture
-	const overlayMaterial = new BABYLON.StandardMaterial(name + "_overlay_material", scene);
-	overlayMaterial.diffuseTexture = dynamicTexture;
-	overlayMaterial.emissiveTexture = dynamicTexture;
-	overlayMaterial.emissiveColor = new BABYLON.Color3(1, 1, 1);
-	overlayPlane.material = overlayMaterial;
-	
-	// Store reference to overlay plane for removal later
-	item.userData.textPlane = overlayPlane;
-	item.userData.textGUI = null; // No GUI needed anymore
-	
-	// Make the overlay plane clickable to reveal artwork
-	overlayPlane.actionManager = new BABYLON.ActionManager(scene);
-	overlayPlane.actionManager.registerAction(
-		new BABYLON.ExecuteCodeAction(
-			BABYLON.ActionManager.OnPickTrigger,
-			function() {
-				if (!item.userData.isRevealed) {
-					// Reveal the artwork
-					item.material = item.userData.hiddenMaterial;
-					item.userData.isRevealed = true;
-					
-					// Remove overlay plane
-					if (item.userData.textPlane) {
-						item.userData.textPlane.dispose();
-						if (item.userData.textGUI) {
-							item.userData.textGUI.dispose();
-						}
-					}
-				}
-			}
-		)
-	);
+	// Store reference for cleanup (no overlay plane needed anymore)
+	item.userData.textPlane = null;
+	item.userData.textGUI = null;
 	
 	// Note: The item's action manager will be set up in index.html to handle both reveal and normal interaction
 	
 	return item;
+}
+
+var resetHiddenArtworks = function(scene) {
+	// Resets all hidden artworks to their initial "Hidden Artwork!" state
+	// This allows the reveal action to be done again every time you enter the gallery
+	
+	scene.meshes.forEach((mesh) => {
+		// Check if this is a hidden artwork (has hiddenMaterial in userData) and is currently revealed
+		if (mesh.userData && mesh.userData.hiddenMaterial && mesh.userData.isRevealed === true) {
+			// Reset the revealed state
+			mesh.userData.isRevealed = false;
+			
+			// Recreate the "Hidden Artwork!" texture
+			const textureSize = 512;
+			const dynamicTexture = new BABYLON.DynamicTexture(mesh.name + "_texture", { width: textureSize, height: textureSize }, scene);
+			const context = dynamicTexture.getContext();
+			
+			// Fill white background
+			context.fillStyle = "white";
+			context.fillRect(0, 0, textureSize, textureSize);
+			
+			// Draw text
+			context.fillStyle = "black";
+			context.font = "bold 48px sans-serif";
+			context.textAlign = "center";
+			context.textBaseline = "middle";
+			context.fillText("Hidden Artwork!", textureSize / 2, textureSize / 2);
+			
+			// Update the texture
+			dynamicTexture.update();
+			
+			// Create material with the dynamic texture
+			var blankMaterial = new BABYLON.StandardMaterial("blank_" + mesh.name, scene);
+			blankMaterial.diffuseTexture = dynamicTexture;
+			blankMaterial.emissiveTexture = dynamicTexture;
+			blankMaterial.emissiveColor = new BABYLON.Color3(1, 1, 1);
+			
+			// Restore the "Hidden Artwork!" material
+			mesh.material = blankMaterial;
+		}
+	});
 }
 
 var item_builder= function(name, item_position, item_size, vector, material,scene, item_shadow_material=null){
