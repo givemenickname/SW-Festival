@@ -141,33 +141,87 @@ function closeChat() {
 async function sendChatMessage() {
     const input = document.getElementById('chat-input');
     const message = input.value.trim();
-    if (message === '') return;
+    if (message === '' || !currentArtworkId) return;
 
     addMessageToChat('user', message);
     input.value = '';
+    input.disabled = true; // Disable input while processing
+
+    const analyzingMessage = addMessageToChat('ai', '이미지를 분석하고 있습니다. 잠시만 기다려 주세요...');
+    console.log('[CHAT] "Analyzing" message added.');
 
     try {
+        console.log('[CHAT] Looking up artwork resource...');
+        const artworkResource = config_file_content[current_gallery][currentArtworkId]?.resource;
+        if (!artworkResource) {
+            throw new Error(`Artwork resource not found for ID: ${currentArtworkId}`);
+        }
+        
+        const imageUrl = `/openvgal/content/${artworkResource}`;
+        console.log(`[CHAT] Fetching image from: ${imageUrl}`);
+
+        const imageResponse = await fetch(imageUrl);
+        if (!imageResponse.ok) {
+            throw new Error(`Image not found at path: ${imageUrl}`);
+        }
+        const imageBlob = await imageResponse.blob();
+        const imageBase64 = await blobToBase64(imageBlob);
+        console.log('[CHAT] Image fetched and converted to base64.');
+
+
+        console.log('[CHAT] Sending request to /api/chat-groq...');
         const response = await fetch('/api/chat-groq', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                artworkId: currentArtworkId,
+                imageBase64: imageBase64,
                 message: message,
             }),
         });
+        console.log(`[CHAT] Received response with status: ${response.status}`);
 
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response' }));
+            throw new Error(errorData.error || 'Network response was not ok');
         }
 
+        console.log('[CHAT] Parsing JSON response...');
         const data = await response.json();
+        console.log('[CHAT] JSON parsed successfully:', data);
+        
+        console.log('[CHAT] Removing "Analyzing" message...');
+        analyzingMessage.remove();
+        console.log('[CHAT] "Analyzing" message removed.');
+
+        console.log('[CHAT] Adding final AI reply...');
         addMessageToChat('ai', data.reply);
+        console.log('[CHAT] Final AI reply added.');
+
     } catch (error) {
-        console.error('Error sending chat message:', error);
-        addMessageToChat('ai', 'Sorry, I am having trouble connecting. Please try again later.');
+        console.error('[CHAT] Error in sendChatMessage:', error);
+        
+        if (analyzingMessage) {
+            analyzingMessage.remove();
+        }
+
+        addMessageToChat('ai', `죄송합니다. 메시지를 보내는 중 오류가 발생했습니다: ${error.message}`);
+    } finally {
+        console.log('[CHAT] Re-enabling input.');
+        input.disabled = false; // Re-enable input
+        input.focus();
     }
+}
+
+// Helper function to convert Blob to Base64
+function blobToBase64(blob) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    });
 }
 
 function addMessageToChat(sender, message) {
@@ -177,6 +231,7 @@ function addMessageToChat(sender, message) {
     messageElement.innerText = message;
     chatMessages.appendChild(messageElement);
     chatMessages.scrollTop = chatMessages.scrollHeight;
+    return messageElement;
 }
 
 
