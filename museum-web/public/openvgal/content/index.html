@@ -470,12 +470,38 @@
 				
 
 
+				// Get dict_items to map artwork names to indices
+				var gallery=config_file_content[current_gallery];
+				var dict_items=Object.keys(gallery).filter(key => gallery[key]["resource_type"]== "image");
+				
 				let indice=0;
 				for (const artwork of gallery_artworks){
 					const artworkMesh = scene.getMeshByName(artwork);
 					artworkMesh.actionManager= new BABYLON.ActionManager();
 					
+					// Find the config key for this artwork by matching the mesh name
+					// Mesh names are like "MyOwn_1_0" where "MyOwn_1" is the config key
+					let artworkConfigKey = null;
+					let artworkIndex = -1;
+					for (let i = 0; i < dict_items.length; i++) {
+						const configKey = dict_items[i];
+						// Check if the artwork mesh name starts with the config key followed by underscore and digits
+						const pattern = new RegExp("^" + configKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + "_\\d+$");
+						if (pattern.test(artwork)) {
+							artworkConfigKey = configKey;
+							artworkIndex = i;
+							break;
+						}
+					}
+					
+					// If we couldn't find a match, fall back to using indice
+					if (artworkIndex === -1) {
+						artworkIndex = indice;
+					}
+					
 					// Check if this is a hidden artwork that needs to be revealed
+					// Capture the artworkIndex in a closure to ensure each handler uses the correct value
+					const capturedIndex = artworkIndex;
 					if (artworkMesh.userData && artworkMesh.userData.isRevealed === false) {
 						// Hidden artwork - reveal it first, then do normal interaction
 						artworkMesh.actionManager.registerAction(
@@ -495,8 +521,8 @@
 											}
 										}
 									}
-									// Then do normal artwork interaction
-									CB_artwork_picked(indice)();
+									// Then do normal artwork interaction using the correct index
+									CB_artwork_picked(capturedIndex)();
 								}
 							)
 						);
@@ -505,7 +531,7 @@
 						artworkMesh.actionManager.registerAction(
 							new BABYLON.ExecuteCodeAction(
 								{ trigger: BABYLON.ActionManager.OnPickTrigger },
-								CB_artwork_picked(indice)
+								CB_artwork_picked(capturedIndex)
 							)
 						);
 					}
