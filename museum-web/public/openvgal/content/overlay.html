@@ -4,7 +4,7 @@
         <p id="artwork-info"></p>
         <div class="action-buttons">
             <button class="action-button" disabled onclick="CB_buy()">Buy print</button>
-            <button class="action-button" disabled onclick="CB_mint()"">Mint NFT</button>
+            <button class="action-button" disabled onclick="CB_mint()">Mint NFT</button>
             <button class="action-button like-button" disabled onclick="CB_toggleLike()">&#x2764;</button>
         </div>
     </div>
@@ -76,4 +76,18 @@
     </div>
     
     <button class="close-button" onclick="toggleHelp()">Close</button>
+</div>
+
+<div id="chat-container" style="display: none;">
+    <div id="chat-box">
+        <div id="chat-header">
+            <span>Chat with AI</span>
+            <button id="close-chat" onclick="closeChat()">X</button>
+        </div>
+        <div id="chat-messages"></div>
+        <div id="chat-input-container">
+            <input type="text" id="chat-input" placeholder="Type your message...">
+            <button id="chat-send" onclick="sendChatMessage()">Send</button>
+        </div>
+    </div>
 </div>
