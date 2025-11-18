@@ -16,338 +16,338 @@
     "parent": "root",
     "resource": "gallery3.glb",
     "template": "T_nopannels.glb",
-    "MyOwn_1": {
-      "resource": "gallery3/my_art.jpg",
+    "Van Gogh1": {
+      "resource": "gallery3/0.jpg",
       "resource_type": "image",
-      "width": "1.00",          
-      "height": "0.67",           
+      "width": "1.00",
+      "height": "0.67",
       "location": "[15.000,-27.529,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #0 MyOwn_1"
+      "metadata": "ID #1 Van Gogh"
     },
-    "CanyonRoadhouse3": {
-      "resource": "gallery3/CanyonRoadhouse3.jpg",
+    "Van Gogh2": {
+      "resource": "gallery3/1.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[7.751,-30.000,2.000]",
       "vector": "[0.0,1.0]",
-      "metadata": "ID #1 CanyonRoadhouse3"
+      "metadata": "ID #2 Van Gogh"
     },
-    "chobe_camping": {
-      "resource": "gallery3/chobe_camping.jpg",
+    "Van Gogh3": {
+      "resource": "gallery3/2.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-7.751,-30.000,2.000]",
       "vector": "[0.0,1.0]",
-      "metadata": "ID #2 chobe_camping"
+      "metadata": "ID #3 Van Gogh"
     },
-    "Chobe_RF_elef": {
-      "resource": "gallery3/Chobe_RF_elef.jpg",
+    "Van Gogh4": {
+      "resource": "gallery3/3.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.30",
       "location": "[-15.000,-27.422,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #3 Chobe_RF_elef"
+      "metadata": "ID #4 Van Gogh"
     },
-    "Chobe_RF_impala": {
-      "resource": "gallery3/Chobe_RF_impala.jpg",
+    "Van Gogh5": {
+      "resource": "gallery3/4.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[7.751,30.000,2.000]",
       "vector": "[0.0,-1.0]",
-      "metadata": "ID #4 Chobe_RF_impala"
+      "metadata": "ID #5 Van Gogh"
     },
-    "Etosha_cebra2": {
-      "resource": "gallery3/Etosha_cebra2.jpg",
+    "Van Gogh6": {
+      "resource": "gallery3/5.webp",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.31",
       "location": "[-7.751,30.000,2.000]",
       "vector": "[0.0,-1.0]",
-      "metadata": "ID #5 Etosha_cebra2"
+      "metadata": "ID #6 Van Gogh"
     },
-    "Etosha_Impala": {
-      "resource": "gallery3/Etosha_Impala.jpg",
+    "Van Gogh7": {
+      "resource": "gallery3/6.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,-24.088,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #6 Etosha_Impala"
+      "metadata": "ID #7 Van Gogh"
     },
-    "Etosha_jirafa2": {
-      "resource": "gallery3/Etosha_jirafa2.jpg",
+    "Van Gogh8": {
+      "resource": "gallery3/7.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,-23.766,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #7 Etosha_jirafa2"
+      "metadata": "ID #8 Van Gogh"
     },
-    "Etosha_okaukuejo": {
-      "resource": "gallery3/Etosha_okaukuejo.jpg",
+    "Van Gogh9": {
+      "resource": "gallery3/8.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,-20.647,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #8 Etosha_okaukuejo"
+      "metadata": "ID #9 Van Gogh"
     },
-    "Etosha_okaukuejo2": {
-      "resource": "gallery3/Etosha_okaukuejo2.jpg",
+    "Van Gogh10": {
+      "resource": "gallery3/9.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,-20.109,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #9 Etosha_okaukuejo2"
+      "metadata": "ID #10 Van Gogh"
     },
-    "Etosha_okaukuejo5": {
-      "resource": "gallery3/Etosha_okaukuejo5.jpg",
+    "Van Gogh11": {
+      "resource": "gallery3/10.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,-17.206,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #10 Etosha_okaukuejo5"
+      "metadata": "ID #11 Van Gogh"
     },
-    "KasanaPuesta2": {
-      "resource": "gallery3/KasanaPuesta2.jpg",
+    "Van Gogh12": {
+      "resource": "gallery3/11.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,-16.453,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #11 KasanaPuesta2"
+      "metadata": "ID #12 Van Gogh"
     },
-    "KubuBaobabs": {
-      "resource": "gallery3/KubuBaobabs.jpg",
+    "Van Gogh13": {
+      "resource": "gallery3/12.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,-13.765,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #12 KubuBaobabs"
+      "metadata": "ID #13 Van Gogh"
     },
-    "KubuPuesta": {
-      "resource": "gallery3/KubuPuesta.jpg",
+    "Van Gogh14": {
+      "resource": "gallery3/13.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,-12.797,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #13 KubuPuesta"
+      "metadata": "ID #14 Van Gogh"
     },
-    "KubuPuesta2": {
-      "resource": "gallery3/KubuPuesta2.jpg",
+    "Van Gogh15": {
+      "resource": "gallery3/14.png",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,-10.324,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #14 KubuPuesta2"
+      "metadata": "ID #15 Van Gogh"
     },
-    "Kubu_noche": {
-      "resource": "gallery3/Kubu_noche.jpg",
+    "Van Gogh16": {
+      "resource": "gallery3/15.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,-9.141,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #15 Kubu_noche"
+      "metadata": "ID #16 Van Gogh"
     },
-    "mahango_juncos2": {
-      "resource": "gallery3/mahango_juncos2.jpg",
+    "Van Gogh17": {
+      "resource": "gallery3/16.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,-6.882,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #16 mahango_juncos2"
+      "metadata": "ID #17 Van Gogh"
     },
-    "Mahango_mono2": {
-      "resource": "gallery3/Mahango_mono2.jpg",
+    "Van Gogh18": {
+      "resource": "gallery3/17.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,-5.485,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #17 Mahango_mono2"
+      "metadata": "ID #18 Van Gogh"
     },
-    "savuti_elef2": {
-      "resource": "gallery3/savuti_elef2.jpg",
+    "Van Gogh19": {
+      "resource": "gallery3/18.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,-3.441,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #18 savuti_elef2"
+      "metadata": "ID #19 Van Gogh"
     },
-    "savuti_elef3": {
-      "resource": "gallery3/savuti_elef3.jpg",
+    "Van Gogh20": {
+      "resource": "gallery3/19.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,-1.828,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #19 savuti_elef3"
+      "metadata": "ID #20 Van Gogh"
     },
-    "savuti_leon4": {
-      "resource": "gallery3/savuti_leon4.jpg",
+    "Van Gogh21": {
+      "resource": "gallery3/20.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,-0.000,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #20 savuti_leon4"
+      "metadata": "ID #21 Van Gogh"
     },
-    "savuti_sol": {
-      "resource": "gallery3/savuti_sol.jpg",
+    "Van Gogh22": {
+      "resource": "gallery3/21.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,1.828,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #21 savuti_sol"
+      "metadata": "ID #22 Van Gogh"
     },
-    "sesriem5": {
-      "resource": "gallery3/sesriem5.jpg",
+    "Van Gogh23": {
+      "resource": "gallery3/22.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,3.441,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #22 sesriem5"
+      "metadata": "ID #23 Van Gogh"
     },
-    "sesriem7": {
-      "resource": "gallery3/sesriem7.jpg",
+    "Van Gogh24": {
+      "resource": "gallery3/23.jpeg",
       "resource_type": "image",
       "width": "0.67",
       "height": "1.00",
       "location": "[-15.000,5.484,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #23 sesriem7"
+      "metadata": "ID #24 Van Gogh"
     },
-    "sesriem8": {
-      "resource": "gallery3/sesriem8.jpg",
+    "Van Gogh25": {
+      "resource": "gallery3/24.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,6.882,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #24 sesriem8"
+      "metadata": "ID #25 Van Gogh"
     },
-    "sesriem_deadvlei2": {
-      "resource": "gallery3/sesriem_deadvlei2.jpg",
+    "Van Gogh26": {
+      "resource": "gallery3/25.jpg",
       "resource_type": "image",
       "width": "0.67",
       "height": "1.00",
       "location": "[-15.000,9.140,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #25 sesriem_deadvlei2"
+      "metadata": "ID #26 Van Gogh"
     },
-    "sesriem_deadvlei3": {
-      "resource": "gallery3/sesriem_deadvlei3.jpg",
+    "Van Gogh27": {
+      "resource": "gallery3/26.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,10.323,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #26 sesriem_deadvlei3"
+      "metadata": "ID #27 Van Gogh"
     },
-    "sesriem_deadvlei4": {
-      "resource": "gallery3/sesriem_deadvlei4.jpg",
+    "Van Gogh28": {
+      "resource": "gallery3/27.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,12.797,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #27 sesriem_deadvlei4"
+      "metadata": "ID #28 Van Gogh"
     },
-    "sesriem_deadvlei5": {
-      "resource": "gallery3/sesriem_deadvlei5.jpg",
+    "Van Gogh29": {
+      "resource": "gallery3/28.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,13.764,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #28 sesriem_deadvlei5"
+      "metadata": "ID #29 Van Gogh"
     },
-    "Sesriem_south3": {
-      "resource": "gallery3/Sesriem_south3.jpg",
+    "Van Gogh30": {
+      "resource": "gallery3/29.webp",
       "resource_type": "image",
       "width": "0.67",
       "height": "1.00",
       "location": "[-15.000,16.453,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #29 Sesriem_south3"
+      "metadata": "ID #30 Van Gogh"
     },
-    "skeleton2": {
-      "resource": "gallery3/skeleton2.jpg",
+    "Van Gogh31": {
+      "resource": "gallery3/30.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,17.206,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #30 skeleton2"
+      "metadata": "ID #31 Van Gogh"
     },
-    "skeleton5": {
-      "resource": "gallery3/skeleton5.jpg",
+    "Van Gogh32": {
+      "resource": "gallery3/31.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,20.109,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #31 skeleton5"
+      "metadata": "ID #32 Van Gogh"
     },
-    "skeleton_arena": {
-      "resource": "gallery3/skeleton_arena.jpg",
+    "Van Gogh33": {
+      "resource": "gallery3/32.jpg",
       "resource_type": "image",
       "width": "0.67",
       "height": "1.00",
       "location": "[15.000,20.647,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #32 skeleton_arena"
+      "metadata": "ID #33 Van Gogh"
     },
-    "skeleton_barco3": {
-      "resource": "gallery3/skeleton_barco3.jpg",
+    "Van Gogh34": {
+      "resource": "gallery3/33.jpg",
       "resource_type": "image",
       "width": "0.67",
       "height": "1.00",
       "location": "[-15.000,23.765,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #33 skeleton_barco3"
+      "metadata": "ID #34 Van Gogh"
     },
-    "Walvis-sesriem5": {
-      "resource": "gallery3/Walvis-sesriem5.jpg",
+    "Van Gogh35": {
+      "resource": "gallery3/34.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,24.088,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #34 Walvis-sesriem5"
+      "metadata": "ID #35 Van Gogh"
     },
-    "Walvis-sesriem6": {
-      "resource": "gallery3/Walvis-sesriem6.jpg",
+    "Van Gogh36": {
+      "resource": "gallery3/35.jpeg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,27.422,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #35 Walvis-sesriem6"
+      "metadata": "ID #36 Van Gogh"
     },
-    "Walvis-sesriem7": {
-      "resource": "gallery3/Walvis-sesriem7.jpg",
+    "Van Gogh37": {
+      "resource": "gallery3/36.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,27.529,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #36 Walvis-sesriem7"
+      "metadata": "ID #37 Van Gogh"
     },
     "root": {
       "resource": "root.glb",
@@ -358,401 +358,401 @@
     "parent": "root",
     "resource": "gallery4.glb",
     "template": "T_nopannels.glb",
-    "Askoki Group 2": {
-      "resource": "gallery4/Askoki Group 2.jpg",
+    "Monet1": {
+      "resource": "gallery4/0.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,-27.625,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #37 Askoki Group 2"
+      "metadata": "ID #1 Monet"
     },
-    "Askoli": {
-      "resource": "gallery4/Askoli.jpg",
+    "Monet2": {
+      "resource": "gallery4/1.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[12.083,-30.000,2.000]",
       "vector": "[0.0,1.0]",
-      "metadata": "ID #38 Askoli"
+      "metadata": "ID #2 Monet"
     },
-    "Baltoro from Urdukas": {
-      "resource": "gallery4/Baltoro from Urdukas.jpg",
+    "Monet3": {
+      "resource": "gallery4/2.png",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-11.000,-30.000,2.000]",
       "vector": "[0.0,1.0]",
-      "metadata": "ID #39 Baltoro from Urdukas"
+      "metadata": "ID #3 Monet"
     },
-    "Baltoro Morraine": {
-      "resource": "gallery4/Baltoro Morraine.jpg",
+    "Monet4": {
+      "resource": "gallery4/3.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,-27.529,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #40 Baltoro Morraine"
+      "metadata": "ID #4 Monet"
     },
-    "Baltoro Morraine2": {
-      "resource": "gallery4/Baltoro Morraine2.jpg",
+    "Monet5": {
+      "resource": "gallery4/4.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[11.000,30.000,2.000]",
       "vector": "[0.0,-1.0]",
-      "metadata": "ID #41 Baltoro Morraine2"
+      "metadata": "ID #5 Monet"
     },
-    "Baltoro Morraine3": {
-      "resource": "gallery4/Baltoro Morraine3.jpg",
+    "Monet6": {
+      "resource": "gallery4/5.png",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-11.000,30.000,2.000]",
       "vector": "[0.0,-1.0]",
-      "metadata": "ID #42 Baltoro Morraine3"
+      "metadata": "ID #6 Monet"
     },
-    "Baltoro Tributary": {
-      "resource": "gallery4/Baltoro Tributary.jpg",
+    "Monet7": {
+      "resource": "gallery4/6.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,-24.375,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #43 Baltoro Tributary"
+      "metadata": "ID #7 Monet"
     },
-    "Baltoro Tributary2": {
-      "resource": "gallery4/Baltoro Tributary2.jpg",
+    "Monet8": {
+      "resource": "gallery4/7.png",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,-24.088,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #44 Baltoro Tributary2"
+      "metadata": "ID #8 Monet"
     },
-    "Baltoro Tributary3": {
-      "resource": "gallery4/Baltoro Tributary3.jpg",
+    "Monet9": {
+      "resource": "gallery4/8.png",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,-21.125,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #45 Baltoro Tributary3"
+      "metadata": "ID #9 Monet"
     },
-    "Broad Glacier": {
-      "resource": "gallery4/Broad Glacier.jpg",
+    "Monet10": {
+      "resource": "gallery4/9.png",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,-20.647,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #46 Broad Glacier"
+      "metadata": "ID #10 Monet"
     },
-    "Concordia Clouds": {
-      "resource": "gallery4/Concordia Clouds.jpg",
+    "Monet11": {
+      "resource": "gallery4/10.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,-17.875,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #47 Concordia Clouds"
+      "metadata": "ID #11 Monet"
     },
-    "Concordia Storm": {
-      "resource": "gallery4/Concordia Storm.jpg",
+    "Monet12": {
+      "resource": "gallery4/11.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,-17.206,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #48 Concordia Storm"
+      "metadata": "ID #12 Monet"
     },
-    "Gasherbrum": {
-      "resource": "gallery4/Gasherbrum.jpg",
+    "Monet13": {
+      "resource": "gallery4/12.png",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,-14.625,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #49 Gasherbrum"
+      "metadata": "ID #13 Monet"
     },
-    "Godwin Austen Glacier": {
-      "resource": "gallery4/Godwin Austen Glacier.jpg",
+    "Monet14": {
+      "resource": "gallery4/13.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,-13.765,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #50 Godwin Austen Glacier"
+      "metadata": "ID #14 Monet"
     },
-    "Jhol at night": {
-      "resource": "gallery4/Jhol at night.jpg",
+    "Monet15": {
+      "resource": "gallery4/14.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,-11.375,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #51 Jhol at night"
+      "metadata": "ID #15 Monet"
     },
-    "K2 from BroadPeak BC": {
-      "resource": "gallery4/K2 from BroadPeak BC.jpg",
+    "Monet16": {
+      "resource": "gallery4/15.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,-10.324,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #52 K2 from BroadPeak BC"
+      "metadata": "ID #16 Monet"
     },
-    "K2 from Concordia": {
-      "resource": "gallery4/K2 from Concordia.jpg",
+    "Monet17": {
+      "resource": "gallery4/16.png",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,-8.125,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #53 K2 from Concordia"
+      "metadata": "ID #17 Monet"
     },
-    "K2 Moonlight": {
-      "resource": "gallery4/K2 Moonlight.jpg",
+    "Monet18": {
+      "resource": "gallery4/17.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,-6.882,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #54 K2 Moonlight"
+      "metadata": "ID #18 Monet"
     },
-    "Khal Khal Glacier": {
-      "resource": "gallery4/Khal Khal Glacier.jpg",
+    "Monet19": {
+      "resource": "gallery4/18.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,-4.875,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #55 Khal Khal Glacier"
+      "metadata": "ID #19 Monet"
     },
-    "Leaving Concordia": {
-      "resource": "gallery4/Leaving Concordia.jpg",
+    "Monet20": {
+      "resource": "gallery4/19.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,-3.441,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #56 Leaving Concordia"
+      "metadata": "ID #20 Monet"
     },
-    "Liligo Glacier": {
-      "resource": "gallery4/Liligo Glacier.jpg",
+    "Monet21": {
+      "resource": "gallery4/20.png",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,-1.625,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #57 Liligo Glacier"
+      "metadata": "ID #21 Monet"
     },
-    "Liligo Glacier2": {
-      "resource": "gallery4/Liligo Glacier2.jpg",
+    "Monet22": {
+      "resource": "gallery4/21.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,-0.000,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #58 Liligo Glacier2"
+      "metadata": "ID #22 Monet"
     },
-    "Marble Peak": {
-      "resource": "gallery4/Marble Peak.jpg",
+    "Monet23": {
+      "resource": "gallery4/22.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.43",
       "location": "[15.000,1.625,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #59 Marble Peak"
+      "metadata": "ID #23 Monet"
     },
-    "Muztagh Glacier": {
-      "resource": "gallery4/Muztagh Glacier.jpg",
+    "Monet24": {
+      "resource": "gallery4/23.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,3.441,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #60 Muztagh Glacier"
+      "metadata": "ID #24 Monet"
     },
-    "Paiju Clouds": {
-      "resource": "gallery4/Paiju Clouds.jpg",
+    "Monet25": {
+      "resource": "gallery4/24.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,4.875,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #61 Paiju Clouds"
+      "metadata": "ID #25 Monet"
     },
-    "Paiju Sunset": {
-      "resource": "gallery4/Paiju Sunset.jpg",
+    "Monet26": {
+      "resource": "gallery4/25.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,6.882,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #62 Paiju Sunset"
+      "metadata": "ID #26 Monet"
     },
-    "RoadAskoli": {
-      "resource": "gallery4/RoadAskoli.jpg",
+    "Monet27": {
+      "resource": "gallery4/26.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,8.125,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #63 RoadAskoli"
+      "metadata": "ID #27 Monet"
     },
-    "RoadAskoli2": {
-      "resource": "gallery4/RoadAskoli2.jpg",
+    "Monet28": {
+      "resource": "gallery4/27.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,10.323,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #64 RoadAskoli2"
+      "metadata": "ID #28 Monet"
     },
-    "Skardu Kids": {
-      "resource": "gallery4/Skardu Kids.jpg",
+    "Monet29": {
+      "resource": "gallery4/28.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,11.375,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #65 Skardu Kids"
+      "metadata": "ID #29 Monet"
     },
-    "Skardu": {
-      "resource": "gallery4/Skardu.jpg",
+    "Monet30": {
+      "resource": "gallery4/29.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,13.764,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #66 Skardu"
+      "metadata": "ID #30 Monet"
     },
-    "Skardu2": {
-      "resource": "gallery4/Skardu2.jpg",
+    "Monet31": {
+      "resource": "gallery4/30.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,14.625,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #67 Skardu2"
+      "metadata": "ID #31 Monet"
     },
-    "Skardu3": {
-      "resource": "gallery4/Skardu3.jpg",
+    "Monet32": {
+      "resource": "gallery4/31.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,17.206,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #68 Skardu3"
+      "metadata": "ID #32 Monet"
     },
-    "Skardu4": {
-      "resource": "gallery4/Skardu4.jpg",
+    "Monet33": {
+      "resource": "gallery4/32.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,17.875,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #69 Skardu4"
+      "metadata": "ID #33 Monet"
     },
-    "Skardu5": {
-      "resource": "gallery4/Skardu5.jpg",
+    "Monet34": {
+      "resource": "gallery4/33.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,20.647,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #70 Skardu5"
+      "metadata": "ID #34 Monet"
     },
-    "Tiny figures Baltoro": {
-      "resource": "gallery4/Tiny figures Baltoro.jpg",
+    "Monet35": {
+      "resource": "gallery4/34.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,21.125,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #71 Tiny figures Baltoro"
+      "metadata": "ID #35 Monet"
     },
-    "Trango Glaciar Morraine": {
-      "resource": "gallery4/Trango Glaciar Morraine.jpg",
+    "Monet36": {
+      "resource": "gallery4/35.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,24.088,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #72 Trango Glaciar Morraine"
+      "metadata": "ID #36 Monet"
     },
-    "Trango Towers Jan": {
-      "resource": "gallery4/Trango Towers Jan.jpg",
+    "Monet37": {
+      "resource": "gallery4/36.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,24.375,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #73 Trango Towers Jan"
+      "metadata": "ID #37 Monet"
     },
-    "Truck": {
-      "resource": "gallery4/Truck.jpg",
+    "Monet38": {
+      "resource": "gallery4/37.jpg",
       "resource_type": "image",
       "width": "0.67",
       "height": "1.00",
       "location": "[7.750,-30.000,2.000]",
       "vector": "[0.0,1.0]",
-      "metadata": "ID #74 Truck"
+      "metadata": "ID #38 Monet"
     },
-    "Uli Biafo Glaciar": {
-      "resource": "gallery4/Uli Biafo Glaciar.jpg",
+    "Monet39": {
+      "resource": "gallery4/38.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-4.500,-30.000,2.000]",
       "vector": "[0.0,1.0]",
-      "metadata": "ID #75 Uli Biafo Glaciar"
+      "metadata": "ID #39 Monet"
     },
-    "Vigne Glacier": {
-      "resource": "gallery4/Vigne Glacier.jpg",
+    "Monet40": {
+      "resource": "gallery4/39.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-15.000,27.529,2.000]",
       "vector": "[1.0,0.0]",
-      "metadata": "ID #76 Vigne Glacier"
+      "metadata": "ID #40 Monet"
     },
-    "Vigne Peak": {
-      "resource": "gallery4/Vigne Peak.jpg",
+    "Monet41": {
+      "resource": "gallery4/40.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[4.500,30.000,2.000]",
       "vector": "[0.0,-1.0]",
-      "metadata": "ID #77 Vigne Peak"
+      "metadata": "ID #41 Monet"
     },
-    "Vigne Peak2": {
-      "resource": "gallery4/Vigne Peak2.jpg",
+    "Monet42": {
+      "resource": "gallery4/41.JPG",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[-4.500,30.000,2.000]",
       "vector": "[0.0,-1.0]",
-      "metadata": "ID #78 Vigne Peak2"
+      "metadata": "ID #42 Monet"
     },
-    "Way to Jhola": {
-      "resource": "gallery4/Way to Jhola.jpg",
+    "Monet43": {
+      "resource": "gallery4/42.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[15.000,27.625,2.000]",
       "vector": "[-1.0,0.0]",
-      "metadata": "ID #79 Way to Jhola"
+      "metadata": "ID #43 Monet"
     },
-    "Way to Jhola2": {
-      "resource": "gallery4/Way to Jhola2.jpg",
+    "Monet44": {
+      "resource": "gallery4/43.jpg",
       "resource_type": "image",
       "width": "1.00",
       "height": "0.67",
       "location": "[3.417,-30.000,2.000]",
       "vector": "[0.0,1.0]",
-      "metadata": "ID #80 Way to Jhola2"
+      "metadata": "ID #44 Monet"
     },
     "root": {
       "resource": "root.glb",

@@ -3,6 +3,7 @@ const DOOR_LABELS = {
 	"gallery3": "Van Gogh",
 	"gallery4": "Monet",
   };
+const HIDDEN_ARTWORK_LABEL = "Hidden Artwork!";
   
   // Babylon GUI가 로드됐는지 확인
   function ensureGUI() {
@@ -179,6 +180,51 @@ var text3D_builder=function(name, item_position, vector, parent, scene){
 
 }
 
+var buildHiddenArtworkMaterial = function(targetMesh, scene, options = {}) {
+	ensureGUI();
+
+	const textureSize = options.textureSize || 1024;
+	const labelText = options.label || HIDDEN_ARTWORK_LABEL;
+	const fontSize = options.fontSize || Math.floor(textureSize * 0.18);
+
+	targetMesh.userData = targetMesh.userData || {};
+
+	if (targetMesh.userData.textGUI) {
+		try { targetMesh.userData.textGUI.dispose(); } catch (_) {}
+		targetMesh.userData.textGUI = null;
+	}
+
+	const guiTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(targetMesh, textureSize, textureSize, false);
+	guiTexture.name = targetMesh.name + "_hidden_gui";
+
+	const background = new BABYLON.GUI.Rectangle();
+	background.background = "white";
+	background.thickness = 0;
+	background.alpha = 1;
+	guiTexture.addControl(background);
+
+	const textBlock = new BABYLON.GUI.TextBlock();
+	textBlock.text = labelText;
+	textBlock.color = "black";
+	textBlock.fontWeight = "bold";
+	textBlock.fontSize = fontSize;
+	textBlock.textWrapping = true;
+	textBlock.textHorizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+	textBlock.textVerticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+	background.addControl(textBlock);
+
+	if (targetMesh.material) {
+		targetMesh.material.disableLighting = true;
+		targetMesh.material.emissiveColor = new BABYLON.Color3(1, 1, 1);
+		targetMesh.material.backFaceCulling = false;
+	}
+
+	targetMesh.userData.textGUI = guiTexture;
+	targetMesh.userData.isRevealed = false;
+
+	return targetMesh.material;
+}
+
 var createHiddenArtwork = function(name, item_position, item_size, vector, hidden_material, scene, item_shadow_material=null) {
 	// Creates a hidden artwork that shows "Hidden Artwork!" text instead of the image
 	// When clicked, it reveals the actual artwork
@@ -196,31 +242,8 @@ var createHiddenArtwork = function(name, item_position, item_size, vector, hidde
 	// Store the actual material for later reveal, but don't apply it yet
 	item.userData = { hiddenMaterial: hidden_material, isRevealed: false };
 	
-	// Create dynamic texture with text "Hidden Artwork!" drawn on it
-	const textureSize = 512;
-	const dynamicTexture = new BABYLON.DynamicTexture(name + "_texture", { width: textureSize, height: textureSize }, scene);
-	const context = dynamicTexture.getContext();
-	
-	// Fill white background
-	context.fillStyle = "white";
-	context.fillRect(0, 0, textureSize, textureSize);
-	
-	// Draw text
-	context.fillStyle = "black";
-	context.font = "bold 48px sans-serif";
-	context.textAlign = "center";
-	context.textBaseline = "middle";
-	context.fillText("Hidden Artwork!", textureSize / 2, textureSize / 2);
-	
-	// Update the texture
-	dynamicTexture.update();
-	
-	// Create material with the dynamic texture (text drawn directly on the artwork)
-	var blankMaterial = new BABYLON.StandardMaterial("blank_" + name, scene);
-	blankMaterial.diffuseTexture = dynamicTexture;
-	blankMaterial.emissiveTexture = dynamicTexture;
-	blankMaterial.emissiveColor = new BABYLON.Color3(1, 1, 1);
-	item.material = blankMaterial;
+	// Apply the white background with centered "Hidden Artwork!" label
+	buildHiddenArtworkMaterial(item, scene);
 	
 	// Create shadow
 	if (item_shadow_material!=null) {
@@ -256,7 +279,6 @@ var createHiddenArtwork = function(name, item_position, item_size, vector, hidde
 	
 	// Store reference for cleanup (no overlay plane needed anymore)
 	item.userData.textPlane = null;
-	item.userData.textGUI = null;
 	
 	// Note: The item's action manager will be set up in index.html to handle both reveal and normal interaction
 	
@@ -273,33 +295,8 @@ var resetHiddenArtworks = function(scene) {
 			// Reset the revealed state
 			mesh.userData.isRevealed = false;
 			
-			// Recreate the "Hidden Artwork!" texture
-			const textureSize = 512;
-			const dynamicTexture = new BABYLON.DynamicTexture(mesh.name + "_texture", { width: textureSize, height: textureSize }, scene);
-			const context = dynamicTexture.getContext();
-			
-			// Fill white background
-			context.fillStyle = "white";
-			context.fillRect(0, 0, textureSize, textureSize);
-			
-			// Draw text
-			context.fillStyle = "black";
-			context.font = "bold 48px sans-serif";
-			context.textAlign = "center";
-			context.textBaseline = "middle";
-			context.fillText("Hidden Artwork!", textureSize / 2, textureSize / 2);
-			
-			// Update the texture
-			dynamicTexture.update();
-			
-			// Create material with the dynamic texture
-			var blankMaterial = new BABYLON.StandardMaterial("blank_" + mesh.name, scene);
-			blankMaterial.diffuseTexture = dynamicTexture;
-			blankMaterial.emissiveTexture = dynamicTexture;
-			blankMaterial.emissiveColor = new BABYLON.Color3(1, 1, 1);
-			
 			// Restore the "Hidden Artwork!" material
-			mesh.material = blankMaterial;
+			buildHiddenArtworkMaterial(mesh, scene);
 		}
 	});
 }
@@ -417,10 +414,11 @@ function populate_template(config_file, room_name,scene){
 		scaled_width=item_size*gallery[item]["width"];
 		scaled_height=item_size*gallery[item]["height"];
 		
-		// Check if this is the last artwork in gallery3
-		let isLastArtworkInGallery3 = (room_name === "gallery3" && itemIndex === dict_items.length - 1);
+		// Check if this is the last artwork in galleries that support hidden items
+		const galleriesWithHiddenArtworks = ["gallery3", "gallery4"];
+		let isHiddenArtwork = (galleriesWithHiddenArtworks.includes(room_name) && itemIndex === dict_items.length - 1);
 		
-		if (isLastArtworkInGallery3) {
+		if (isHiddenArtwork) {
 			// Create hidden artwork with text instead of image
 			createHiddenArtwork(item + "_" + i, {x:location[0], y:location[2], z:location[1]}, {width:scaled_width, height:scaled_height}, orientation, items_material, scene, item_shadow_material);
 		} else {
