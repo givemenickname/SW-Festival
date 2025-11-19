@@ -181,49 +181,110 @@ var text3D_builder=function(name, item_position, vector, parent, scene){
 }
 
 var buildHiddenArtworkMaterial = function(targetMesh, scene, options = {}) {
-	ensureGUI();
+    const textureSize = options.textureSize || 1024;
+    const labelText   = options.label ?? "Hidden Artwork!";
+    const baseFontRatio = options.fontRatio || 0.20; // 기본 비율 (조금 줄이고 싶으면 0.15 정도)
+    let fontSize      = options.fontSize || Math.floor(textureSize * baseFontRatio);
 
-	const textureSize = options.textureSize || 1024;
-	const labelText = options.label || HIDDEN_ARTWORK_LABEL;
-	const fontSize = options.fontSize || Math.floor(textureSize * 0.18);
+    targetMesh.userData = targetMesh.userData || {};
+    if (targetMesh.userData.hiddenTextTexture) {
+        try { targetMesh.userData.hiddenTextTexture.dispose(); } catch (_) {}
+        targetMesh.userData.hiddenTextTexture = null;
+    }
+    if (targetMesh.userData.hiddenTextMaterial) {
+        try { targetMesh.userData.hiddenTextMaterial.dispose(); } catch (_) {}
+        targetMesh.userData.hiddenTextMaterial = null;
+    }
 
-	targetMesh.userData = targetMesh.userData || {};
+    const dt = new BABYLON.DynamicTexture(
+        targetMesh.name + "_hiddenTextTex",
+        { width: textureSize, height: textureSize },
+        scene,
+        false
+    );
+    const ctx = dt.getContext();
 
-	if (targetMesh.userData.textGUI) {
-		try { targetMesh.userData.textGUI.dispose(); } catch (_) {}
-		targetMesh.userData.textGUI = null;
-	}
+    // 흰 배경
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, textureSize, textureSize);
 
-	const guiTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(targetMesh, textureSize, textureSize, false);
-	guiTexture.name = targetMesh.name + "_hidden_gui";
+    const maxWidth = textureSize * 0.8; // 텍스트가 차지할 수 있는 최대 너비
 
-	const background = new BABYLON.GUI.Rectangle();
-	background.background = "white";
-	background.thickness = 0;
-	background.alpha = 1;
-	guiTexture.addControl(background);
+    // 🔥 단어 단위 줄바꿈 + 자동 폰트 스케일링
+    function getLinesAndFontSize(text) {
+        let currentFontSize = fontSize;
+        let lines = [text];
 
-	const textBlock = new BABYLON.GUI.TextBlock();
-	textBlock.text = labelText;
-	textBlock.color = "black";
-	textBlock.fontWeight = "bold";
-	textBlock.fontSize = fontSize;
-	textBlock.textWrapping = true;
-	textBlock.textHorizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-	textBlock.textVerticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-	background.addControl(textBlock);
+        for (let tries = 0; tries < 10; tries++) {
+            ctx.font = currentFontSize + "px sans-serif";
 
-	if (targetMesh.material) {
-		targetMesh.material.disableLighting = true;
-		targetMesh.material.emissiveColor = new BABYLON.Color3(1, 1, 1);
-		targetMesh.material.backFaceCulling = false;
-	}
+            // 단어 기준으로 줄바꿈
+            const words = text.split(" ");
+            lines = [];
+            let line = words[0];
 
-	targetMesh.userData.textGUI = guiTexture;
-	targetMesh.userData.isRevealed = false;
+            for (let i = 1; i < words.length; i++) {
+                const testLine = line + " " + words[i];
+                if (ctx.measureText(testLine).width <= maxWidth) {
+                    line = testLine;
+                } else {
+                    lines.push(line);
+                    line = words[i];
+                }
+            }
+            lines.push(line);
 
-	return targetMesh.material;
-}
+            const longest = Math.max(...lines.map(l => ctx.measureText(l).width));
+
+            if (longest <= maxWidth) {
+                return { lines, fontSize: currentFontSize };
+            }
+
+            // 아직도 너무 넓으면 폰트 줄이기
+            currentFontSize *= 0.9;
+        }
+        // 최종 실패해도 마지막 값 사용
+        return { lines, fontSize: currentFontSize };
+    }
+
+    const r = getLinesAndFontSize(labelText);
+    fontSize = r.fontSize;
+    const lines = r.lines;
+
+    ctx.font = fontSize + "px sans-serif";
+    ctx.fillStyle = "black";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    const lineHeight = fontSize * 1.2;
+    const totalHeight = lineHeight * lines.length;
+    let startY = textureSize / 2 - totalHeight / 2 + lineHeight / 2;
+
+    // 최종 텍스트 그리기
+    for (let i = 0; i < lines.length; i++) {
+        ctx.fillText(lines[i], textureSize / 2, startY + i * lineHeight);
+    }
+
+    dt.update();
+
+    const mat = new BABYLON.StandardMaterial(
+        targetMesh.name + "_hiddenTextMat",
+        scene
+    );
+    mat.diffuseTexture = dt;
+    mat.specularColor = new BABYLON.Color3(0, 0, 0);
+    mat.emissiveColor = new BABYLON.Color3(1, 1, 1);
+    mat.backFaceCulling = false;
+    mat.disableLighting = true;
+
+    targetMesh.material = mat;
+    targetMesh.userData.hiddenTextTexture  = dt;
+    targetMesh.userData.hiddenTextMaterial = mat;
+    targetMesh.userData.isRevealed = false;
+
+    return mat;
+};
+
 
 var createHiddenArtwork = function(name, item_position, item_size, vector, hidden_material, scene, item_shadow_material=null) {
 	// Creates a hidden artwork that shows "Hidden Artwork!" text instead of the image

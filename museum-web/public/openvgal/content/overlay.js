@@ -5,78 +5,108 @@ function CB_toggleLike() {
     likeButton.classList.toggle('liked');
 }
 
-function CB_buy(){};
-function CB_mint(){};
+function CB_buy() {};
+function CB_mint() {};
 
 function CB_artwork_picked(index) {
-	return function() {
-		manual_navigation_idx = index;
-		manual_move();
-	};
+    return function() {
+        manual_navigation_idx = index;
+        manual_move();
+    };
 }
 
+// -----------------------------------------------------------------------------
+// 유틸 함수들
+// -----------------------------------------------------------------------------
 
-//rest of utility functions
+function manual_move() {
+    //get active camera
+    const camera = scene.activeCamera;
+    const camera_distance = [4, 6];
 
-function manual_move(){
-	//get active camera
-	const camera = scene.activeCamera;
-	const camera_distance = [4, 6];
+    var gallery = config_file_content[current_gallery];
+    var dict_items = Object.keys(gallery).filter(key => gallery[key]["resource_type"] == "image");
+    if (dict_items.length == 0) return;
+    var n_items = dict_items.length;
 
+    //check limits
+    if (manual_navigation_idx < 0) {
+        manual_navigation_idx = n_items - 1;
+    } else if (manual_navigation_idx == n_items) {
+        manual_navigation_idx = 0;
+    }
 
-	var gallery=config_file_content[current_gallery];
-	var dict_items=Object.keys(gallery).filter(key => gallery[key]["resource_type"]== "image");
-	if (dict_items.length ==0) return;
-	var n_items=dict_items.length;
+    //get position and vector. Assuming they are JSON strings of 3-element arrays [x, y, z]
+    let item_position_array = JSON.parse(gallery[dict_items[manual_navigation_idx]]['location']);
+    let item_vector_array = JSON.parse(gallery[dict_items[manual_navigation_idx]]['vector']);
 
-	//check limits
-	if (manual_navigation_idx<0){
-		manual_navigation_idx= n_items-1;
-	} else if (manual_navigation_idx ==n_items){
-		manual_navigation_idx=0;
-	}
+    // Create Babylon.js Vector3 objects
+    const target_position = new BABYLON.Vector3(item_position_array[0], item_position_array[2], item_position_array[1]);
+    const target_vector = new BABYLON.Vector3(item_vector_array[0], item_vector_array[2], item_vector_array[1]).normalize();
 
+    // Calculate the camera's position to be in front of the item
+    let camera_position;
+    if (window.innerWidth > 600) {
+        camera_position = target_position.add(target_vector.scale(camera_distance[0]));
+    } else {
+        camera_position = target_position.add(target_vector.scale(camera_distance[1]));
+    }
 
-	//get position and vector. Assuming they are JSON strings of 3-element arrays [x, y, z]
-	let item_position_array = JSON.parse(gallery[dict_items[manual_navigation_idx]]['location']);
-	let item_vector_array = JSON.parse(gallery[dict_items[manual_navigation_idx]]['vector']);
+    // Aim the camera at the target
+    camera.position = camera_position;
+    camera.setTarget(target_position);
 
-	// Create Babylon.js Vector3 objects
-	const target_position = new BABYLON.Vector3(item_position_array[0], item_position_array[2], item_position_array[1]);
-	const target_vector = new BABYLON.Vector3(item_vector_array[0], item_vector_array[2], item_vector_array[1]).normalize();
-
-	// Calculate the camera's position to be in front of the item
-	let camera_position;
-	if  (window.innerWidth>600){
-	    camera_position = target_position.add(target_vector.scale(camera_distance[0]));
-	}
-	else {
-	    camera_position = target_position.add(target_vector.scale(camera_distance[1]));
-	}
-
-	// Aim the camera at the target
-	camera.position = camera_position;
-	camera.setTarget(target_position);
-
-	showInfoBox("Title:  " + gallery[dict_items[manual_navigation_idx]]["metadata"], dict_items[manual_navigation_idx]);
-
-
+    showInfoBox("Title:  " + gallery[dict_items[manual_navigation_idx]]["metadata"], dict_items[manual_navigation_idx]);
 }
 
-function manual_move_backward(){
-	manual_navigation_idx--;
-	manual_move();
+function manual_move_backward() {
+    manual_navigation_idx--;
+    manual_move();
 }
 
-function manual_move_forward(){
-	manual_navigation_idx++;
-	manual_move();
+function manual_move_forward() {
+    manual_navigation_idx++;
+    manual_move();
 }
+
+// -----------------------------------------------------------------------------
+// 히든 작품 판별 함수 (populate_template 로직과 맞춤)
+// -----------------------------------------------------------------------------
+function isHiddenArtwork(artworkId) {
+    try {
+        const galleriesWithHiddenArtworks = ["gallery3", "gallery4"];
+
+        // 현재 갤러리가 히든 작품이 있는 갤러리가 아니면 false
+        if (!galleriesWithHiddenArtworks.includes(current_gallery)) {
+            return false;
+        }
+
+        const gallery = config_file_content[current_gallery];
+        if (!gallery) return false;
+
+        const dict_items = Object.keys(gallery).filter(
+            key => gallery[key]["resource_type"] == "image"
+        );
+        if (dict_items.length === 0) return false;
+
+        // 마지막 이미지가 히든 작품
+        const lastArtworkId = dict_items[dict_items.length - 1];
+
+        return artworkId === lastArtworkId;
+    } catch (e) {
+        console.warn("isHiddenArtwork error:", e);
+        return false;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// InfoBox + 버튼
+// -----------------------------------------------------------------------------
 
 // show metadata or other info
 function showInfoBox(title, artworkId) {
     document.getElementById("artwork-info").innerText = title;
-    //enable action buttons
+    // enable action buttons
     document.querySelectorAll('.action-button').forEach(button => {
         button.disabled = false;
     });
@@ -85,7 +115,7 @@ function showInfoBox(title, artworkId) {
     chatButton.classList.add('action-button');
     chatButton.innerText = 'Chat';
     chatButton.onclick = () => openChat(artworkId);
-    
+
     const actionButtons = document.querySelector('.action-buttons');
     // clear existing buttons before adding new ones
     actionButtons.innerHTML = '';
@@ -104,9 +134,9 @@ function hideInfoBox() {
     }
 }
 
-
-
+// -----------------------------------------------------------------------------
 // Help popup functionality
+// -----------------------------------------------------------------------------
 function toggleHelp() {
     const helpPopup = document.getElementById('help-popup');
     helpPopup.style.display = helpPopup.style.display === 'none' ? 'block' : 'none';
@@ -116,13 +146,15 @@ function changeLanguage(lang) {
     // Remove active class from all language buttons and texts
     document.querySelectorAll('.lang-button').forEach(button => button.classList.remove('active'));
     document.querySelectorAll('.help-text').forEach(text => text.classList.remove('active'));
-    
+
     // Add active class to selected language button and text
     document.querySelector(`.lang-button[onclick="changeLanguage('${lang}')"]`).classList.add('active');
     document.querySelector(`.help-text.${lang}`).classList.add('active');
 }
 
+// -----------------------------------------------------------------------------
 // Chat functionality
+// -----------------------------------------------------------------------------
 let currentArtworkId = null;
 let conversationCount = 0;
 let isStreaming = false;
@@ -133,7 +165,15 @@ function openChat(artworkId) {
     document.getElementById('chat-container').style.display = 'flex';
     const chatMessages = document.getElementById('chat-messages');
     chatMessages.innerHTML = ''; // Clear previous messages
-    addMessageToChat('ai', `안녕하세요! '${artworkId}'에 대해 무엇이 궁금하신가요?`);
+
+    if (isHiddenArtwork(artworkId)) {
+        addMessageToChat(
+            'ai',
+            "이 작품은 히든 작품입니다! 🎨\n먼저 작품을 감상한 뒤, 당신이 느낀 해석을 자유롭게 적어주세요.\n그 다음에 제가 점수를 매기고, 일반적인 해석도 함께 알려드릴게요."
+        );
+    } else {
+        addMessageToChat('ai', `안녕하세요! '${artworkId}'에 대해 무엇이 궁금하신가요?`);
+    }
 }
 
 function closeChat() {
@@ -158,22 +198,35 @@ async function sendChatMessage() {
     const aiMessage = addMessageToChat('ai', '답변을 작성하는 중입니다...');
 
     try {
+        const hiddenMode = isHiddenArtwork(currentArtworkId);
         const countForRequest = conversationCount;
-        conversationCount += 1;
 
-        const response = await fetch('/api/chat-gemini', {
+        // 일반 작품일 때만 conversationCount 증가
+        if (!hiddenMode) {
+            conversationCount += 1;
+        }
+
+        // 히든 / 일반 분기
+        const url = hiddenMode ? '/api/hidden-artwork' : '/api/chat-gemini';
+        const body = hiddenMode
+            ? JSON.stringify({
+                  artworkId: currentArtworkId,
+                  interpretation: message, // 히든 작품: 사용자의 해석
+              })
+            : JSON.stringify({
+                  artworkId: currentArtworkId,
+                  message: message,
+                  conversationCount: countForRequest,
+              });
+
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                artworkId: currentArtworkId,
-                message: message,
-                conversationCount: countForRequest,
-            }),
+            body,
         });
 
-        let data;
         if (!response.ok) {
             const errorText = await response.text();
             throw new Error(errorText || 'AI 응답을 불러오지 못했습니다.');
@@ -199,7 +252,9 @@ async function sendChatMessage() {
     } catch (error) {
         console.error('Error sending chat message:', error);
         aiMessage.innerText = error.message || 'Sorry, I am having trouble connecting. Please try again later.';
-        conversationCount = Math.max(0, conversationCount - 1);
+        if (!isHiddenArtwork(currentArtworkId)) {
+            conversationCount = Math.max(0, conversationCount - 1);
+        }
     } finally {
         isStreaming = false;
     }
@@ -215,8 +270,9 @@ function addMessageToChat(sender, message) {
     return messageElement;
 }
 
-
+// -----------------------------------------------------------------------------
 // Load overlay content
+// -----------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', function() {
     fetch('overlay.html')
         .then(response => response.text())
