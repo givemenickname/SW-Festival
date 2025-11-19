@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import path from 'path';
 import { promises as fs } from 'fs';
+import { DIGITAL_MUSEUM_PROMPT } from '@/prompts/digitalMuseumPrompt';
 
 const genAIApiKey = process.env.GOOGLE_GEMINI_API_KEY;
 const genAI = genAIApiKey ? new GoogleGenerativeAI(genAIApiKey) : null;
@@ -75,7 +76,15 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { artworkId, message } = body;
+    const {
+      artworkId,
+      message,
+      conversationCount = 0,
+    }: {
+      artworkId?: string;
+      message?: string;
+      conversationCount?: number;
+    } = body;
 
     if (!artworkId || !message) {
       return NextResponse.json(
@@ -104,22 +113,27 @@ export async function POST(request: Request) {
     const mimeType = getMimeType(artwork.resource);
 
     const model = genAI.getGenerativeModel({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3-pro-preview',
     });
 
-    const promptText = [
-      'You are a warm, knowledgeable digital museum docent.',
-      `Artwork metadata: ${artwork.metadata ?? 'N/A'}.`,
-      'Explain what the visitor is seeing and answer their question clearly in Korean.',
-      `Visitor message: "${message}"`,
+    const composedPrompt = [
+      DIGITAL_MUSEUM_PROMPT,
+      '',
+      '--- 현재 대화 맥락 ---',
+      `conversationCount: ${conversationCount}`,
+      `artworkId: ${artworkId}`,
+      `artworkMetadata: ${artwork.metadata ?? 'N/A'}`,
+      `visitorMessage: "${message}"`,
+      '',
+      '위 정보를 기반으로 한국어로만 답변하세요.',
     ].join('\n');
 
-    const result = await model.generateContent({
+    const result = await model.generateContentStream({
       contents: [
         {
           role: 'user',
           parts: [
-            { text: promptText },
+            { text: composedPrompt },
             {
               inlineData: {
                 data: imageBase64,
@@ -131,9 +145,30 @@ export async function POST(request: Request) {
       ],
     });
 
-    const reply = result.response.text();
+    const stream = new ReadableStream({
+      async start(controller) {
+        const encoder = new TextEncoder();
+        try {
+          for await (const chunk of result.stream) {
+            const chunkText = chunk.text();
+            if (chunkText) {
+              controller.enqueue(encoder.encode(chunkText));
+            }
+          }
+        } catch (streamError) {
+          controller.error(streamError);
+        } finally {
+          controller.close();
+        }
+      },
+    });
 
-    return NextResponse.json({ reply });
+    return new Response(stream, {
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Cache-Control': 'no-cache',
+      },
+    });
   } catch (error) {
     const message =
       error instanceof Error ? error.message : 'Unknown Gemini error';

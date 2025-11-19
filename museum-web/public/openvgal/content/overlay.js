@@ -124,9 +124,12 @@ function changeLanguage(lang) {
 
 // Chat functionality
 let currentArtworkId = null;
+let conversationCount = 0;
+let isStreaming = false;
 
 function openChat(artworkId) {
     currentArtworkId = artworkId;
+    conversationCount = 0;
     document.getElementById('chat-container').style.display = 'flex';
     const chatMessages = document.getElementById('chat-messages');
     chatMessages.innerHTML = ''; // Clear previous messages
@@ -136,17 +139,28 @@ function openChat(artworkId) {
 function closeChat() {
     document.getElementById('chat-container').style.display = 'none';
     currentArtworkId = null;
+    conversationCount = 0;
 }
 
 async function sendChatMessage() {
     const input = document.getElementById('chat-input');
     const message = input.value.trim();
     if (message === '') return;
+    if (isStreaming) {
+        addMessageToChat('ai', '잠시만요! 이전 답변이 완료되면 이어갈게요.');
+        return;
+    }
 
+    isStreaming = true;
     addMessageToChat('user', message);
     input.value = '';
 
+    const aiMessage = addMessageToChat('ai', '답변을 작성하는 중입니다...');
+
     try {
+        const countForRequest = conversationCount;
+        conversationCount += 1;
+
         const response = await fetch('/api/chat-gemini', {
             method: 'POST',
             headers: {
@@ -155,21 +169,39 @@ async function sendChatMessage() {
             body: JSON.stringify({
                 artworkId: currentArtworkId,
                 message: message,
+                conversationCount: countForRequest,
             }),
         });
 
         let data;
         if (!response.ok) {
-            data = await response.json().catch(() => ({}));
-            const errorMessage = data.details || data.error || 'AI 응답을 불러오지 못했습니다.';
-            throw new Error(errorMessage);
-        } else {
-            data = await response.json();
-            addMessageToChat('ai', data.reply);
+            const errorText = await response.text();
+            throw new Error(errorText || 'AI 응답을 불러오지 못했습니다.');
         }
+
+        if (!response.body) {
+            throw new Error('스트리밍 응답을 받을 수 없습니다.');
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let aiText = '';
+
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            aiText += decoder.decode(value, { stream: true });
+            aiMessage.innerText = aiText.trim();
+        }
+
+        const finalText = (aiText + decoder.decode()).trim();
+        aiMessage.innerText = finalText || '응답이 전달되지 않았어요. 다시 시도해볼까요?';
     } catch (error) {
         console.error('Error sending chat message:', error);
-        addMessageToChat('ai', error.message || 'Sorry, I am having trouble connecting. Please try again later.');
+        aiMessage.innerText = error.message || 'Sorry, I am having trouble connecting. Please try again later.';
+        conversationCount = Math.max(0, conversationCount - 1);
+    } finally {
+        isStreaming = false;
     }
 }
 
@@ -180,6 +212,7 @@ function addMessageToChat(sender, message) {
     messageElement.innerText = message;
     chatMessages.appendChild(messageElement);
     chatMessages.scrollTop = chatMessages.scrollHeight;
+    return messageElement;
 }
 
 
@@ -195,7 +228,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Add event listener for chat input
             document.getElementById('chat-input').addEventListener('keydown', function(event) {
-                if (event.key === 'Enter') {
+                if (event.key === 'Enter' && !event.repeat) {
+                    event.preventDefault();
                     sendChatMessage();
                 }
             });
