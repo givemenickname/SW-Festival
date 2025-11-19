@@ -147,7 +147,7 @@ async function sendChatMessage() {
     input.value = '';
 
     try {
-        const response = await fetch('/api/chat-groq', {
+        const response = await fetch('/api/chat-gemini', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -158,15 +158,18 @@ async function sendChatMessage() {
             }),
         });
 
+        let data;
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            data = await response.json().catch(() => ({}));
+            const errorMessage = data.details || data.error || 'AI 응답을 불러오지 못했습니다.';
+            throw new Error(errorMessage);
+        } else {
+            data = await response.json();
+            addMessageToChat('ai', data.reply);
         }
-
-        const data = await response.json();
-        addMessageToChat('ai', data.reply);
     } catch (error) {
         console.error('Error sending chat message:', error);
-        addMessageToChat('ai', 'Sorry, I am having trouble connecting. Please try again later.');
+        addMessageToChat('ai', error.message || 'Sorry, I am having trouble connecting. Please try again later.');
     }
 }
 
